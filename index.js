@@ -10,6 +10,7 @@ module.exports = function(moment) {
       nth: function(n) {
         return anchor.clone().add(count * n, unit);
       },
+      anchor: anchor,
       count: function(d) {
         var diff;
         diff = d.diff(anchor, unit, true);

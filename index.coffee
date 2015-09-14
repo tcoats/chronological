@@ -5,6 +5,7 @@ module.exports = (moment) ->
     res =
       nth: (n) ->
         anchor.clone().add count * n, unit
+      anchor: anchor
       count: (d) ->
         diff = d.diff anchor, unit, yes
         diff /= count
