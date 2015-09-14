@@ -1,6 +1,6 @@
 {
   "name": "chronological",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cron-like time schedule format and calculator",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,5 @@
     "url": "https://github.com/metocean/chronological/issues"
   },
   "homepage": "https://github.com/metocean/chronological#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
