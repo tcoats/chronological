@@ -20,25 +20,52 @@ module.exports = (moment) ->
         diff /= count
         diff = Math.floor diff
         res.nth diff
+      next: (d) ->
+        current = res.count d
+        next = Math.ceil current
+        if next is current
+          next++
+        next
+      prev: (d) ->
+        current = res.count d
+        prev = Math.floor current
+        if prev is current
+          prev--
+        prev
       between: (start, end) ->
         if start.isAfter end
           [start, end] = [end, start]
-        startindex = res.count start
-        nextstartindex = Math.ceil startindex
-        if nextstartindex is startindex
-          nextstartindex++
-        endindex = res.count end
-        prevendindex = Math.floor endindex
-        if prevendindex is endindex
-          prevendindex--
-        return [] if nextstartindex > prevendindex
-        [nextstartindex..prevendindex].map res.nth
+        startindex = res.next start
+        endindex = res.prev end
+        return [] if startindex > endindex
+        [startindex..endindex].map res.nth
       clone: ->
         anchor.clone().every count, unit
       forward: (n) ->
         anchor.add count * n, unit
       backward: (n) ->
         anchor.subtract count * n, unit
+      timer: (cb) ->
+        # find the next target
+        target = res.next moment.utc()
+        timeout = null
+        tick = ->
+          now = moment.utc()
+          next = res.next now
+          while target < next
+            cb()
+            target++
+          target_time = res.nth target
+          mstravel = target_time.diff now, 'ms'
+          # maximum 1 minute time travel to prevent clock skew
+          # travel to the millisecond after the target
+          timeout = setTimeout tick, Math.min 60000, mstravel + 1
+        tick()
+
+        end: ->
+          return if !timeout?
+          clearTimeout timeout
+          timeout = null
     res
 
   moment.every = (count, unit) ->

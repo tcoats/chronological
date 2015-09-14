@@ -29,3 +29,18 @@ console.log(firstdayafternow.format(iso8601));
 var firstdaybeforenow = everyday.before(moment.utc());
 console.log(firstdaybeforenow.format(iso8601));
 ```
+
+# Bonus timer
+```js
+var moment = require('moment-timezone');
+var spanner = require('timespanner');
+var chrono = require('chronological');
+
+moment = chrono(spanner(moment));
+
+var iso8601 = 'YYYY-MM-DD[T]HH:mm:ssZ';
+
+moment.spanner('now/m+3s').every(10, 's').timer(function() {
+  console.log(moment.utc().format(iso8601));
+});
+```
