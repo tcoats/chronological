@@ -1,6 +1,6 @@
 {
   "name": "chronological",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cron-like time schedule format and calculator",
   "main": "index.js",
   "scripts": {
