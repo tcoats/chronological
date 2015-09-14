@@ -45,16 +45,18 @@ module.exports = (moment) ->
         anchor.add count * n, unit
       backward: (n) ->
         anchor.subtract count * n, unit
-      timer: (cb) ->
-        # find the next target
-        target = res.next moment.utc()
+      timer: (target, cb) ->
+        if !cb?
+          cb = target
+          # find the next target
+          target = res.next moment.utc()
         timeout = null
         tick = ->
           now = moment.utc()
           next = res.next now
           # execute all iterations we may have missed
           while target < next
-            cb res.nth target
+            cb res.nth(target), target
             target++
           target_time = res.nth target
           mstravel = target_time.diff now, 'ms'

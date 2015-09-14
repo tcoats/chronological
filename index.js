@@ -74,16 +74,19 @@ module.exports = function(moment) {
       backward: function(n) {
         return anchor.subtract(count * n, unit);
       },
-      timer: function(cb) {
-        var target, tick, timeout;
-        target = res.next(moment.utc());
+      timer: function(target, cb) {
+        var tick, timeout;
+        if (cb == null) {
+          cb = target;
+          target = res.next(moment.utc());
+        }
         timeout = null;
         tick = function() {
           var mstravel, next, now, target_time;
           now = moment.utc();
           next = res.next(now);
           while (target < next) {
-            cb(res.nth(target));
+            cb(res.nth(target), target);
             target++;
           }
           target_time = res.nth(target);
