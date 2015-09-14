@@ -52,8 +52,9 @@ module.exports = (moment) ->
         tick = ->
           now = moment.utc()
           next = res.next now
+          # execute all iterations we may have missed
           while target < next
-            cb()
+            cb res.nth target
             target++
           target_time = res.nth target
           mstravel = target_time.diff now, 'ms'

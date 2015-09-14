@@ -83,7 +83,7 @@ module.exports = function(moment) {
           now = moment.utc();
           next = res.next(now);
           while (target < next) {
-            cb();
+            cb(res.nth(target));
             target++;
           }
           target_time = res.nth(target);
