@@ -50,6 +50,8 @@ module.exports = (moment) ->
           cb = target
           # find the next target
           target = res.next moment.utc()
+        if !target?
+          target = res.next moment.utc()
         timeout = null
         tick = ->
           now = moment.utc()
@@ -76,5 +78,22 @@ module.exports = (moment) ->
 
   moment.fn.every = (count, unit) ->
     every @, count, unit
+
+  moment.fn.timer = (cb) ->
+    target_time = @
+    timeout = null
+    tick = ->
+      now = moment.utc()
+      return cb target_time if now.isAfter target_time
+      mstravel = target_time.diff now, 'ms'
+      # maximum 1 minute time travel to prevent clock skew
+      # travel to the millisecond after the target
+      timeout = setTimeout tick, Math.min 60000, mstravel + 1
+    timeout = setTimeout tick, 1
+
+    cancel: ->
+      return if !timeout?
+      clearTimeout timeout
+      timeout = null
 
   moment

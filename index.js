@@ -80,6 +80,9 @@ module.exports = function(moment) {
           cb = target;
           target = res.next(moment.utc());
         }
+        if (target == null) {
+          target = res.next(moment.utc());
+        }
         timeout = null;
         tick = function() {
           var mstravel, next, now, target_time;
@@ -112,6 +115,30 @@ module.exports = function(moment) {
   };
   moment.fn.every = function(count, unit) {
     return every(this, count, unit);
+  };
+  moment.fn.timer = function(cb) {
+    var target_time, tick, timeout;
+    target_time = this;
+    timeout = null;
+    tick = function() {
+      var mstravel, now;
+      now = moment.utc();
+      if (now.isAfter(target_time)) {
+        return cb(target_time);
+      }
+      mstravel = target_time.diff(now, 'ms');
+      return timeout = setTimeout(tick, Math.min(60000, mstravel + 1));
+    };
+    timeout = setTimeout(tick, 1);
+    return {
+      cancel: function() {
+        if (timeout == null) {
+          return;
+        }
+        clearTimeout(timeout);
+        return timeout = null;
+      }
+    };
   };
   return moment;
 };
