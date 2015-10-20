@@ -54,7 +54,7 @@ module.exports = function(moment) {
         if (start.isAfter(end)) {
           ref = [end, start], start = ref[0], end = ref[1];
         }
-        startindex = res.next(start);
+        startindex = Math.ceil(res.count(start));
         endindex = res.prev(end);
         if (startindex > endindex) {
           return [];

@@ -35,7 +35,7 @@ module.exports = (moment) ->
       between: (start, end) ->
         if start.isAfter end
           [start, end] = [end, start]
-        startindex = res.next start
+        startindex = Math.ceil res.count start
         endindex = res.prev end
         return [] if startindex > endindex
         [startindex..endindex].map res.nth
